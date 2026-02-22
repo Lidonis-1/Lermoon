@@ -1,0 +1,28 @@
+.ver_scen{
+   position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(13, 70, 65);
+}
+body {
+    margin: 0px;
+}
+.ver_box{
+    position: relative;
+    border-radius: 50px;
+    width: 40%;
+    background-color: rgb(194, 182, 160);
+    aspect-ratio: 1/1;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -50%);
+}
+.log_button {
+    width: 20%;
+    transform: translate(-50%, -50%);
+    aspect-ratio: 3/1;
+    position: relative;
+    left:50%;
+    top:80%;
+    background-color: rgb(146, 198, 194);
+}
