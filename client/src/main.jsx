@@ -1,10 +1,22 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import HomeMain from './HomePage/HomeMain'
+import Verif_page from './VerPage/verif';
 
-import Verif_page from './ver_page/verif'
 
-createRoot(document.getElementById('root')).render(
+const router = createBrowserRouter([{
+  path:'/',
+  element: <Verif_page/>,
+},
+{
+  path:'/home',
+  element: <HomeMain/>
+}
+]);
 
-  <Verif_page />
-
+ReactDOM.createRoot(document.getElementById('root')).render(
+<React.StrictMode>
+  <RouterProvider router={router}/>
+</React.StrictMode>
 )
