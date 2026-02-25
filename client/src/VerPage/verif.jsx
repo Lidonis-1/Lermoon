@@ -6,7 +6,7 @@ import './styles ver.css'
 export default function Verif_page(){
     return<div className="ver_scen">
         <div className="ver_box">
-            <Link to='/home'>
+            <Link to='/Graphs'>
              <button className="log_button" type="button">login
              </button>
             </Link>

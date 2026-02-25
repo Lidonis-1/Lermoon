@@ -1,0 +1,39 @@
+.profile_scen{
+    background-color: black;
+    height: 100vh;
+}
+.user_part{
+    background-color: rgb(33, 71, 97);
+    height: 350px;
+}
+.library_part{
+    position: relative;
+    background-color: rgb(68, 75, 78);
+    height: 100%;
+    margin-bottom: 10px;
+
+}
+
+.work-box {
+    float: left; 
+    margin-top: 15px;
+    margin-right: 15px;
+    height: 150px;
+    border-radius: 6px;
+    background: #f7f7f7;
+    white-space: nowrap;
+    aspect-ratio: 1/1;
+}
+
+.add-btn {
+    margin-top: 60px;
+    margin-bottom: 15px;
+    margin-left: 30px;
+    margin-right: 40px;
+    height: 45px;
+    aspect-ratio: 1/1;
+    border-radius: 6px;
+    border: 1px dashed #888;
+    background: transparent;
+    cursor: pointer;
+}

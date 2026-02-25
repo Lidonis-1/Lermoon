@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import HomeMain from './HomePage/HomeMain'
+import Start from './GraphsPage/Graps'
 import Verif_page from './VerPage/verif';
+import Profile from './ProfilePage/ProfilePage';
+import Work from './WorkPage/Work';
 
 
 const router = createBrowserRouter([{
@@ -10,8 +12,16 @@ const router = createBrowserRouter([{
   element: <Verif_page/>,
 },
 {
-  path:'/home',
-  element: <HomeMain/>
+  path:'/Graphs',
+  element: <Start/>
+},
+{
+  path:'/Profile',
+  element: <Profile/>
+},
+{
+  path:'/Work/:id',
+  element: <Work/>
 }
 ]);
 
