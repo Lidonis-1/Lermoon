@@ -7,22 +7,19 @@ import './Profile.css'
 import Start from "../GraphsPage/Graps";
 
 function* idGenerator() {
-    
     let randomId = crypto.randomUUID()
   while (true) {
-    
     yield `/work/${randomId}`
     randomId = crypto.randomUUID()
-    
-    
   }
 }
-
 const gen = idGenerator()
+
 export default function Profile(){
     const [works, setWorks] = useState([])
 
     const addWork = () => {
+
     const id = gen.next().value
     setWorks((befor) => [...befor, id])
   }
