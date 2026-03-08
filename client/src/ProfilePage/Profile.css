@@ -15,6 +15,8 @@
 }
 
 .work-box {
+    text-align: center;
+    line-height: 150px;
     float: left; 
     margin-top: 15px;
     margin-right: 15px;
