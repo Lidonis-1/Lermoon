@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import './Profile.css'
 import Start from "../GraphsPage/Graps";
-import {idGenerator} from "../../ObjGen";
+import {idGenerator} from "./ObjGen";
 
 
 
