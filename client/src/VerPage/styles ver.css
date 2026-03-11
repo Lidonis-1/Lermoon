@@ -8,9 +8,12 @@ body {
     margin: 0px;
 }
 .ver_box{
+    display: flex;
+    padding: 50px;
+  flex-direction: column;;
     position: relative;
     border-radius: 50px;
-    width: 40%;
+    width: 30%;
     background-color: rgb(194, 182, 160);
     aspect-ratio: 1/1;
     left:50%;
@@ -18,11 +21,31 @@ body {
     transform: translate(-50%, -50%);
 }
 .log_button {
+   position: relative;
+    top:50%;
+    left:50%;
     width: 20%;
     transform: translate(-50%, -50%);
     aspect-ratio: 3/1;
-    position: relative;
-    left:50%;
-    top:80%;
     background-color: rgb(146, 198, 194);
+}
+.label{
+    
+    margin: 10%;
+    display: grid;
+    justify-content: "center";
+    align-items: "center"
+}
+.button_reg{
+    margin: 2%;
+    position: relative;
+    
+    left:50%;
+    width: 20%;
+    transform: translate( -60%, 0);
+    aspect-ratio: 3/1;
+    background-color: rgb(146, 198, 194);
+}
+.link{
+    margin-top: 8%;;
 }

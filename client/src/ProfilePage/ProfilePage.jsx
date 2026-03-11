@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import './Profile.css'
 import Start from "../GraphsPage/Graps";
-import idGenerator from "./ObjGen";
+import {idGenerator} from "../../ObjGen";
 
 
 
@@ -17,7 +17,6 @@ export default function Profile(){
     const id = gen.next().value;
     setWorks((before) => [...before, id]);
   }
-
     return <div className="profile_scen">
         <div className="user_part"></div>
         <div className="library_part">

@@ -1,6 +1,4 @@
-import React from "react";
-
-export default function* idGenerator(min, max, name) {
+export function* idGenerator(min, max, name) {
     let randomId = Math.round((Math.random()*(max-min)) + min);
 
   while (true) {
