@@ -19,3 +19,6 @@ The following laboratory assignments are integrated into the codebase:
 - **Lab 2:** `[path/to/file]`
 - **Lab 3:** `[path/to/file]`
 - **Lab 4:** `[path/to/file]`
+- **Lab 5:** `[path/to/file]`
+- **Lab 6:** `[path/to/file]`
+- **Lab 7:** `[path/to/file]`

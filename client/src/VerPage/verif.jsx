@@ -4,8 +4,9 @@ import './styles ver.css'
 
 
 function Login(callback){   //форма входу (потрібна перевірка на на введені данні при login)
-    const [name, setName]=useState("")
-    const [password, setPasswword] = useState("")
+    const [name, setName]=useState("");
+    const [password, setPasswword] = useState("");
+
     return(
 
         <div className="ver_box">
@@ -29,18 +30,19 @@ function Login(callback){   //форма входу (потрібна перев
         )}
 
 function Register(callback){    //форма регистрації ()
-    const [name, setName] = useState("")
-    const [password, setPasswword] = useState("")
+    const [name, setName] = useState("");
+    const [password, setPasswword] = useState("");
 
-   function Logging(){
+   function Reg(){
     
     if(localStorage.getItem(name) !== 0){
-        localStorage.setItem(name,password)
+        localStorage.setItem(name,password);
     }
     else{
-        throw new Error("user allready exist in local host")
+        throw new Error("user allready exist in local host");
     }
-    callback(false);
+    //localStorage.clear();     /////
+    callback(false);  
     return
    }
 
@@ -66,7 +68,7 @@ function Register(callback){    //форма регистрації ()
                 confirm password:
                 <input type="password" placeholder="confirm it"/> 
             </label>
-            <button className="button_reg" onClick={Logging}>register</button>
+            <button className="button_reg" onClick={Reg}>register</button>
         </div>
     )
 }

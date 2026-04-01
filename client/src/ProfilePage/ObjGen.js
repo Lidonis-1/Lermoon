@@ -1,11 +1,11 @@
-import { random } from "my-labs-library";
+import { generateKey } from "my-labs-library";
 
 
 export function* idGenerator(min, max, name) {
-    let randomId = random(min,max);
+    let randomId = generateKey(20);
 
   while (true) {
     yield `/${name}/${randomId}`;
-    randomId = random(min,max);
+    randomId = generateKey(20);
   }
 }
