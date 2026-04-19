@@ -10,13 +10,13 @@ import {idGenerator} from "./ObjGen";
 const gen = idGenerator(10,100, "work");
 
 export default function Profile(){
-    const [works, setWorks] = useState([]);
+    const [works, setWorks] = useState([]); 
 
-    const addWork = () => {
-
-    const id = gen.next().value;
-    setWorks((before) => [...before, id]);
-  }
+    const addWork = () => { //додання роботи
+      const id = gen.next().value;
+      setWorks((before) => [...before, id]);
+    }
+  
     return <div className="profile_scen">
         <div className="user_part"></div>
         <div className="library_part">

@@ -9,7 +9,12 @@ app.get('/hello',(req,res) =>{
 });
 */
 
-const PORT = 5001;
+const PORT = 5000;
 const server = app.listen(PORT, ()=>{
     console.log(`server is started on port ${PORT}`)
+});
+
+app.post('/api/upload', (req, res) => {
+    console.log("Файл отримано!");
+    res.status(200).send("Успішно завантажено");
 });

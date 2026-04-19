@@ -1,0 +1,8 @@
+.pctr{
+    height: 45px;
+    aspect-ratio: 1/1;
+    border-radius: 6px;
+    border: 1px dashed #888;
+    background: transparent;
+    cursor: pointer;
+}
