@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import "./work.css";
 
 export default function Work() {
   const [state, setState] = useState("ready");
@@ -29,11 +30,19 @@ export default function Work() {
   }
 
   return (
-    <div>
-      <button className="first"></button>
-      <input type="file" name="image" onChange={handleOnChange} />
-      <button onClick={handleOnSubmit}>Submit</button>
-      <img src={preview} />
+    <div className="workscene">
+      <div className="workTree">
+        <div className="castomButton">
+          <input
+            type="file"
+            name="image"
+            onChange={handleOnChange}
+            className="imageInput"
+          />
+        </div>
+        <img src={preview} />
+      </div>
+      <div className="workintruments"></div>
     </div>
   );
 }
