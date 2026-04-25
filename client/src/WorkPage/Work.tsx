@@ -7,40 +7,40 @@ export default function Work() {
   const [file, setFile] = useState<File | undefined>();
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
 
-  async function handleOnSubmit(e: React.SyntheticEvent) {
-    e.preventDefault();
-
-    if (typeof file === "undefined") return;
-
-    setState("sent");
-  }
-  function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleAction(e: React.ChangeEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement & {
       files: FileList;
     };
 
-    setFile(target.files[0]);
+    const selectedFile = target.files[0];
+    if (!selectedFile) return;
 
-    const file = new FileReader();
-    file.onload = function () {
-      setPreview(file.result);
+    setFile(selectedFile);
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      setPreview(reader.result);
+      setState("sent");
     };
 
-    file.readAsDataURL(target.files[0]);
+    reader.readAsDataURL(selectedFile);
   }
 
   return (
     <div className="workscene">
       <div className="workTree">
         <div className="castomButton">
-          <input
-            type="file"
-            name="image"
-            onChange={handleOnChange}
-            className="imageInput"
-          />
+          {state === "ready" ? (
+            <input
+              type="file"
+              name="image"
+              onChange={handleAction}
+              className="imageInput"
+            />
+          ) : (
+            <img src={preview as string} className="imageInput" />
+          )}
         </div>
-        <img src={preview} />
       </div>
       <div className="workintruments"></div>
     </div>
