@@ -20,27 +20,44 @@
     background-color: #888;
     
 }
-.workTree{
-    width: 80%;
-    
-    height: 100%;
-    background-color: rgb(123, 123, 123);
-
-}
 .workintruments{
     flex-grow: 1;
     height: 100%;
     background-color: #474747
 
 }
+.workTree{
+    width: 80%;
+    
+    height: 100%;
+    background-color: rgb(123, 123, 123);
+    display: flex;
+  
+  /* 1. Робимо напрямок колонкою, але REVERSE (зворотним) */
+  flex-direction: column-reverse; 
+  
+  /* 2. Центруємо по горизонталі */
+  align-items: center; 
+  
+  /* 3. Центруємо по вертикалі (якщо у div задана висота) */
+  justify-content: center;
+
+}
+
 .castomButton{
     display: flex;
     position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    width: 200px;
+    width: 20%;
     aspect-ratio: 1/1;
     background-color: #474747;
 
+}
+.imagePreview {
+  display: flex;
+  width: 20%; 
+  aspect-ratio: 1/1;
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 10px;
+  
 }

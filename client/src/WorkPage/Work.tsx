@@ -1,45 +1,46 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import "./work.css";
 
+import axios from "axios";
+
 export default function Work() {
-  const [state, setState] = useState("ready");
-  const [file, setFile] = useState<File | undefined>();
-  const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
+  /
+  const [files, setFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
 
   async function handleAction(e: React.ChangeEvent<HTMLInputElement>) {
-    const target = e.target as HTMLInputElement & {
-      files: FileList;
-    };
+    const selectedFiles = e.target.files;
+    if (!selectedFiles) return;
 
-    const selectedFile = target.files[0];
-    if (!selectedFile) return;
+    
+    const newFiles = Array.from(selectedFiles);
 
-    setFile(selectedFile);
+    
+    setFiles((prev) => [...prev, ...newFiles]);
 
-    const reader = new FileReader();
-    reader.onload = function () {
-      setPreview(reader.result);
-      setState("sent");
-    };
-
-    reader.readAsDataURL(selectedFile);
+    
+    newFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviews((prev) => [...prev, reader.result as string]);
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   return (
     <div className="workscene">
       <div className="workTree">
+        {previews.map((src, index) => (
+          <img key={index} src={src} className="imagePreview" />
+        ))}
         <div className="castomButton">
-          {state === "ready" ? (
-            <input
-              type="file"
-              name="image"
-              onChange={handleAction}
-              className="imageInput"
-            />
-          ) : (
-            <img src={preview as string} className="imageInput" />
-          )}
+          <input
+            type="file"
+            name="image"
+            onChange={handleAction}
+            className="imageInput"
+          />
         </div>
       </div>
       <div className="workintruments"></div>
