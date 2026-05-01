@@ -61,3 +61,8 @@
   margin-top: 10px;
   
 }
+.saveBut{
+    position: relative;
+    height: 10%;
+    width: 100%;
+}

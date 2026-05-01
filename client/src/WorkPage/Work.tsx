@@ -5,13 +5,16 @@ import axios from "axios";
 export default function Work() {
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
-
   const [serverImages, setServerImages] = useState<string[]>([]);
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/work");
-      setServerImages(response.data);
+      const response = await fetch("http://localhost:8080/work");
+      if (!response.ok) {
+        throw new Error(`помилка http: ${response.status}`);
+      }
+      const data = await response.json();
+      setServerImages(data);
     } catch (error) {
       console.error("списку нема:", error);
     }
@@ -37,6 +40,19 @@ export default function Work() {
     });
   }
 
+  async function clearFiles() {
+    try {
+      const response = await fetch("http://localhost:8080/work/delete", {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error(`${response.status}`);
+      }
+    } catch (err) {
+      console.log(`помилка видалення файлу : ${err}`);
+    }
+  }
+
   async function uploadFiles() {
     if (files.length === 0) return;
 
@@ -46,14 +62,14 @@ export default function Work() {
     });
 
     try {
-      await axios.post("http://localhost:8080/work", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      await fetch("http://localhost:8080/work", {
+        method: "POST",
+        body: formData,
       });
 
       setFiles([]); // очищити вибрані файли
       setPreviews([]); // очищити прев'ю
       fetchImages(); // оновити список з сервера
-      alert("Завантажено успішно!");
     } catch (error) {
       console.error("Помилка завантаження:", error);
     }
@@ -64,7 +80,7 @@ export default function Work() {
       <div className="workTree">
         {serverImages.map((imgUrl, idx) => (
           <img
-            key={idx}
+            key={`server-${idx}`}
             src={`http://localhost:8080/uploads/${imgUrl}`}
             className="imagePreview"
             alt="server-content"
@@ -72,13 +88,35 @@ export default function Work() {
         ))}
 
         {previews.map((src, index) => (
-          <img key={index} src={src} className="imagePreview" alt="preview" />
+          <img
+            key={`preview-${index}`}
+            src={src}
+            className="imagePreview"
+            alt="preview"
+          />
         ))}
 
         <div className="castomButton">
-          <input type="file" onChange={taker} className="imageInput" />
-          <button onClick={uploadFiles} disabled={files.length === 0}></button>
+          <input
+            type="file"
+            multiple
+            onChange={taker}
+            className="imageInput"
+            accept="image/*"
+          />
         </div>
+      </div>
+      <div className="workintruments">
+        <button
+          onClick={uploadFiles}
+          disabled={files.length === 0}
+          className="saveBut"
+        >
+          save progress
+        </button>
+        <button className="saveBut" onClick={clearFiles}>
+          clear work
+        </button>
       </div>
     </div>
   );

@@ -18,10 +18,26 @@ app.post("/work", upload.array("images"), (req, res)=>{
     console.log(req.files)
 })
 
+app.delete("/delete",(req,res)=>{
+    fs.writeFiles("../uploads","",(err)=>{
+        console.error(err);
+        return res.status(500)
+    })
+    res.status(200)
+
+})
+
 app.get("/work", (req, res) => {
    
     const files = fs.readdirSync('./uploads'); 
-    res.json(files);
+    const sortedFiles = files.map(files => ({
+        name: files,
+        time: fs.statSync(`${'./uploads'}/${files}`).mtime.getTime()
+    }))
+    .sort((a,b)=> a.time - b.time)
+    .map(file=>file.name);
+
+    res.json(sortedFiles);
     console.log("na")
    
 });
