@@ -48,6 +48,9 @@ export default function Work() {
       if (!response.ok) {
         throw new Error(`${response.status}`);
       }
+      setServerImages([]);
+      setPreviews([]);
+      setFiles([]);
     } catch (err) {
       console.log(`помилка видалення файлу : ${err}`);
     }
@@ -99,7 +102,6 @@ export default function Work() {
         <div className="castomButton">
           <input
             type="file"
-            multiple
             onChange={taker}
             className="imageInput"
             accept="image/*"
@@ -114,7 +116,11 @@ export default function Work() {
         >
           save progress
         </button>
-        <button className="saveBut" onClick={clearFiles}>
+        <button
+          className="saveBut"
+          onClick={clearFiles}
+          disabled={serverImages.length === 0 && previews.length === 0}
+        >
           clear work
         </button>
       </div>
