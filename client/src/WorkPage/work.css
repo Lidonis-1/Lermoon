@@ -8,15 +8,11 @@
 }
 
 
-.imageInput{
-    position: relative;
-    height: 100%;
-    width: 100%;
-}
+
 .workscene{
     display: flex;
-    height: 100vh;
-    
+    min-height: 100vh;
+    overflow: auto;
     background-color: #888;
     
 }
@@ -28,41 +24,46 @@
 }
 .workTree{
     width: 80%;
-    
-    height: 100%;
+    min-height: 100%;
     background-color: rgb(123, 123, 123);
     display: flex;
-  
-  /* 1. Робимо напрямок колонкою, але REVERSE (зворотним) */
-  flex-direction: column-reverse; 
-  
-  /* 2. Центруємо по горизонталі */
-  align-items: center; 
-  
-  /* 3. Центруємо по вертикалі (якщо у div задана висота) */
-  justify-content: center;
-
+    flex-direction: column-reverse; 
+    align-items: center; 
+    justify-content: center;
+    flex-wrap: wrap; 
+    gap: 10px;       
 }
 
-.castomButton{
+.imagePreview {
+    height: 200px;
+    width: 100%;
+    object-fit:contain;
+    display: block; 
+}
+
+.castomButton {
     display: flex;
     position: relative;
     width: 20%;
     aspect-ratio: 1/1;
     background-color: #474747;
-
+    align-items: center;
+    justify-content: center;
+    color: white;
 }
-.imagePreview {
-  display: flex;
-  width: 20%; 
-  aspect-ratio: 1/1;
-  position: relative;
-  flex-shrink: 0;
-  margin-top: 10px;
-  
+
+.imageInput {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
 }
 .saveBut{
     position: relative;
-    height: 10%;
+    height: 100%;
     width: 100%;
 }

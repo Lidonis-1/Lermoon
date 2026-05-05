@@ -87,6 +87,9 @@ export default function Work() {
             src={`http://localhost:8080/uploads/${imgUrl}`}
             className="imagePreview"
             alt="server-content"
+            onClick={() => {
+              console.log("в розробці");
+            }}
           />
         ))}
 
@@ -96,10 +99,14 @@ export default function Work() {
             src={src}
             className="imagePreview"
             alt="preview"
+            onClick={() => {
+              console.log("в розробці");
+            }}
           />
         ))}
 
         <div className="castomButton">
+          Додати зображення
           <input
             type="file"
             onChange={taker}

@@ -14,6 +14,10 @@ app.use('/uploads', express.static('uploads'));
 app.use(express.json())
 app.use(cors(corsOptions));
 
+app.listen(8080, ()=>{
+    console.log("server is started on port 8080")
+})
+
 app.post("/work", upload.array("images"), (req, res)=>{
     console.log("файли збереженні")
     console.log(req.files)
@@ -51,6 +55,12 @@ app.get("/work", (req, res) => {
     console.log("список відправлено")
 });
 
-app.listen(8080, ()=>{
-    console.log("server is started on port 8080")
+app.get("/profile",(req,res)=>{
+    console.log(req.body);
+    const work = "/work/125"
+    res.json(work).status(200)
+})
+app.post("/profile", (req, res)=>{
+    console.log(req.body.workId)
+    res.status(200)
 })
