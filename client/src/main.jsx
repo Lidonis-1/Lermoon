@@ -20,7 +20,7 @@ const router = createBrowserRouter([{
   element: <Profile/>
 },
 {
-  path:'/Work/:id',
+  path: '/Work/:workID', 
   element: <Work/>
 }
 ]);
