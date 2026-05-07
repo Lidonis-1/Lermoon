@@ -7,7 +7,7 @@ import {idGenerator} from "./ObjGen";
 
 
 
-const gen = idGenerator(10,100, "work");
+const gen = idGenerator(20);
 
 export default function Profile(){
     const [works, setWorks] = useState([]); 
@@ -25,13 +25,13 @@ export default function Profile(){
       }catch(err){
         console.error(err)
       }
-      
     }
+    
     useEffect(()=>{
       getWorks()
     },[])
 
-    async function addWork(){ //додання роботи
+    async function addWork(){ 
       const pathId = gen.next().value;
       const updatedNewWorks = [...newWorks, pathId]
       setNewWorks(updatedNewWorks)
@@ -44,35 +44,30 @@ export default function Profile(){
         })
 
         if (!response.ok) throw new Error(`помилка: ${response.status}`);
-        const newData = await response.json()
-        setWorks((before) => [...before, newData]);
-
       }catch(err){
         console.error(err)
       }
-      
-      
     }
   
     return <div className="profile_scen">
         <div className="user_part"></div>
         <div className="library_part">
-          {/*works.map((place, skey) => (
+          {works.map((place, skey) => (
         <Link
         key={`${skey}`}
-          to={place}
+          to={`/work/${place}`}
         >
           <div className="work-box">
             image
           </div>
         </Link>
-      ))*/}
+      ))}
 
 
           {newWorks.map((place, skey) => (
         <Link
         key={`${skey}`}
-          to={place}
+          to={`/work/${place}`}
         >
           <div className="work-box">
             image

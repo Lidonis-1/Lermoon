@@ -1,11 +1,11 @@
 import { generateKey } from "my-labs-library";
 
 
-export function* idGenerator(min, max, name) {
-    let randomId = crypto.randomUUID();
+export function* idGenerator(num) {
+    let randomId = generateKey(num);
 
   while (true) {
-    yield `/${name}/${randomId}`;
-    randomId = generateKey(20);
+    yield `${randomId}`;
+    randomId = generateKey(num);
   }
 }

@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import "./work.css";
 import axios from "axios";
 
 export default function Work() {
+  const { workID } = useParams<{ workID: string }>();
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [serverImages, setServerImages] = useState<string[]>([]);
 
   const fetchImages = async () => {
     try {
-      const response = await fetch("http://localhost:8080/work");
+      const response = await fetch(
+        `http://localhost:8080/work?workID=${workID}`,
+      );
       if (!response.ok) {
         throw new Error(`помилка http: ${response.status}`);
       }
@@ -42,9 +46,12 @@ export default function Work() {
 
   async function clearFiles() {
     try {
-      const response = await fetch("http://localhost:8080/work/delete", {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:8080/work/delete?workID=${workID}`,
+        {
+          method: "DELETE",
+        },
+      );
       if (!response.ok) {
         throw new Error(`${response.status}`);
       }
@@ -57,34 +64,42 @@ export default function Work() {
   }
 
   async function uploadFiles() {
-    if (files.length === 0) return;
+    // 1. Перевірка: якщо ID немає, нічого не робимо
+    if (!workID || files.length === 0) {
+      console.error("workID відсутній!");
+      return;
+    }
 
     const formData = new FormData();
+    // Можна навіть не додавати в body, якщо ми шлемо через URL
     files.forEach((file) => {
       formData.append("images", file);
     });
 
     try {
-      await fetch("http://localhost:8080/work", {
-        method: "POST",
-        body: formData,
-      });
+      // 2. Обов'язково encodeURIComponent для безпеки URL
+      await fetch(
+        `http://localhost:8080/work?workID=${encodeURIComponent(workID)}`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
-      setFiles([]); // очищити вибрані файли
-      setPreviews([]); // очищити прев'ю
-      fetchImages(); // оновити список з сервера
+      setFiles([]);
+      setPreviews([]);
+      fetchImages();
     } catch (error) {
       console.error("Помилка завантаження:", error);
     }
   }
-
   return (
     <div className="workscene">
       <div className="workTree">
         {serverImages.map((imgUrl, idx) => (
           <img
             key={`server-${idx}`}
-            src={`http://localhost:8080/uploads/${imgUrl}`}
+            src={`http://localhost:8080/uploads/${workID}/${imgUrl}`}
             className="imagePreview"
             alt="server-content"
             onClick={() => {
