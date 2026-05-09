@@ -78,13 +78,10 @@ export default function Work() {
 
     try {
       // 2. Обов'язково encodeURIComponent для безпеки URL
-      await fetch(
-        `http://localhost:8080/work?workID=${encodeURIComponent(workID)}`,
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
+      await fetch(`http://localhost:8080/work?workID=${workID}`, {
+        method: "POST",
+        body: formData,
+      });
 
       setFiles([]);
       setPreviews([]);
@@ -99,15 +96,12 @@ export default function Work() {
         {serverImages.map((imgUrl, idx) => (
           <img
             key={`server-${idx}`}
-            src={`http://localhost:8080/uploads/${workID}/${imgUrl}`}
+            src={`http://localhost:8080/work/image-stream?workID=${workID}&fileName=${imgUrl}`}
             className="imagePreview"
             alt="server-content"
-            onClick={() => {
-              console.log("в розробці");
-            }}
+            onClick={() => console.log("в розробці")}
           />
         ))}
-
         {previews.map((src, index) => (
           <img
             key={`preview-${index}`}
@@ -119,7 +113,6 @@ export default function Work() {
             }}
           />
         ))}
-
         <div className="castomButton">
           Додати зображення
           <input

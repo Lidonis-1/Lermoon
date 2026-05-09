@@ -6,7 +6,6 @@ import path from 'path';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // Пріоритет на Query Params
         const workID = req.query.workID;
 
         if (!workID || workID === 'undefined' || workID === 'null') {
@@ -62,28 +61,39 @@ app.delete("/work/delete", (req, res)=>{
     })
 })
 
+
 app.get("/work", (req, res) => {
-  
-    const workID = req.query.workID; 
+    const workID = req.query.workID;
+    if (!workID) return res.status(400).send("workID не вказано");
 
-    if (!workID) {
-        return res.status(400).send("workID не вказано");
-    }
     const dirPath = `./uploads/${workID}`;
+    if (!fs.existsSync(dirPath)) return res.json([]);
 
-    if (!fs.existsSync(dirPath)) {
-        return res.json([]); 
-    }
-    const files = fs.readdirSync(dirPath); 
+
+    const files = fs.readdirSync(dirPath);
     const sortedFiles = files.map(file => ({
         name: file,
-        time: fs.statSync(`${dirPath}/${file}`).mtime.getTime() 
+        time: fs.statSync(path.join(dirPath, file)).mtime.getTime()
     }))
-    .sort((a,b)=> a.time - b.time)
+    .sort((a, b) => a.time - b.time) 
     .map(file => file.name);
 
     res.json(sortedFiles);
-    console.log(`Список файлів для ${workID} відправлено`);
+});
+
+app.get("/work/image-stream", (req, res) => {
+    const { workID, fileName } = req.query;
+    const filePath = path.join(process.cwd(), 'uploads', String(workID), String(fileName));
+
+    if (fs.existsSync(filePath)) {
+        const stat = fs.statSync(filePath);
+        res.setHeader('Content-Length', stat.size);
+        res.setHeader('Content-Type', 'image/jpeg'); 
+        const stream = fs.createReadStream(filePath);
+        stream.pipe(res);
+    } else {
+        res.status(404).send("Not found");
+    }
 });
 
 app.get("/profile",(req,res)=>{
@@ -110,7 +120,6 @@ app.post("/profile", (req, res)=>{
             fs.mkdirSync(dirPath, { recursive: true });
         }
 
-       
         res.status(200).json("створена директорія");
     } catch (err) {
         console.error(err)
