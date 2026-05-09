@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./work.css";
-import axios from "axios";
 
 export default function Work() {
   const { workID } = useParams<{ workID: string }>();
