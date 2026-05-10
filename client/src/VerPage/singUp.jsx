@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = '/register';
+const REGISTER_URL = 'http://localhost:8080/register';
 
 const Register = () => {
     const userRef = useRef();
@@ -45,38 +45,46 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Перевірка перед відправкою
         const v1 = USER_REGEX.test(user);
         const v2 = PWD_REGEX.test(pwd);
-        if (!v1 || !v2) {
+        if (!v1 || !v2 || !validMatch) {
             setErrMsg("Некоректні дані");
             return;
         }
-        try{
-            const response = await fetch(REGISTER_URL,{
+
+        try {
+            const response = await fetch(REGISTER_URL, {
                 method: "POST",
-                body: JSON.stringify({user, pwd}),
-                headers: {'Content-Type': 'application/json'}
-            })
-            if(!response.ok){
-                throw new Error(`Error: ${response.status}`)
+                body: JSON.stringify({ user, pwd }), // Переконайся, що бекенд очікує саме такі назви полів
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok) {
+                // Обробка різних кодів відповідей
+                if (response.status === 409) {
+                    setErrMsg('Користувач з таким ім’ям вже існує');
+                } else {
+                    setErrMsg('Реєстрація не вдалася');
+                }
+                throw new Error(`Помилка сервера: ${response.status}`);
             }
+
             const result = await response.json();
-
-            console.log(result.data);
-            console.log(result.accessToken)
-            console.log(JSON.stringify(result))
-            setSuccess(true)
+            setSuccess(true);
             
-        }catch(err){
-           if (!err?.response){
-            setErrMsg('No server Response')
+            // Очищення полів (за бажанням)
+            setUser('');
+            setPwd('');
+            setMatchPwd('');
 
-           }else if (err.response?.status === 409){
-            setErrMsg('Username Taken')
-           }else{
-            setErrMsg('Registrtion Failed')
-           }
-           errRef.current.focus();
+        } catch (err) {
+            // Якщо помилка сталася через мережу (сервер вимкнено)
+            if (!err && !errMsg) {
+                setErrMsg('Немає відповіді від сервера');
+            }
+            errRef.current.focus();
         }
     }
 
@@ -86,7 +94,7 @@ const Register = () => {
                 <section>
                     <h1>Успіх!</h1>
                     <p>
-                        <a href="#">Увійти</a>
+                        <a href="http://localhost:5173/Profile">Увійти</a>
                     </p>
                 </section>
             ) : (
@@ -186,7 +194,7 @@ const Register = () => {
                     <p>
                         Вже зареєстровані?<br />
                         <span className="line">
-                            <a href="#">Увійти</a>
+                            <a href="http://localhost:5173/">Увійти</a>
                         </span>
                     </p>
                 </section>

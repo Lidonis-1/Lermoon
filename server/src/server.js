@@ -126,3 +126,53 @@ app.post("/profile", (req, res)=>{
         res.status(500).json("помилка створення директорії");
     }
 })
+
+const usersDB = [];
+
+app.post('/register', async (req, res) => {
+    const { user, pwd } = req.body;
+
+    if (!user || !pwd) {
+        return res.status(400).json({ message: 'Username and password are required.' });
+    }
+
+    const duplicate = usersDB.find(person => person.username === user);
+    if (duplicate) return res.sendStatus(409); // Conflict
+
+    try {
+        // Тут має бути хешування: const hashedPwd = await bcrypt.hash(pwd, 10);
+        const newUser = { "username": user, "password": pwd }; // Зберігайте хеш, а не чистий пароль!
+        usersDB.push(newUser);
+
+        console.log(usersDB);
+        res.status(201).json({ success: `New user ${user} created!` });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+app.post('/auth', async (req, res) => {
+    const { user, pwd } = req.body;
+    if (!user || !pwd) return res.status(400).json({ message: 'Username and password are required.' });
+
+    const foundUser = usersDB.find(person => person.username === user);
+    if (!foundUser) return res.sendStatus(401); // Unauthorized
+
+    // Перевірка пароля (наприклад, bcrypt.compare)
+    const match = (pwd === foundUser.password); 
+    
+    if (match) {
+        
+        const roles = [2001]; // Приклад ролі (User)
+        const accessToken = "your-jwt-token"; // Тут має бути згенерований JWT
+
+        res.json({ 
+            data: { 
+                roles, 
+                accessToken 
+            } 
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});

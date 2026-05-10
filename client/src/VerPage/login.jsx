@@ -1,11 +1,7 @@
-import { useRef, useState, useEffect, useContext } from 'react';
-import AuthContext from "./context/AuthProvider";
-
-import axios from './api/axios';
-const LOGIN_URL = '/auth';
+import { useRef, useState, useEffect} from 'react';
+const LOGIN_URL = 'http://localhost:8080/auth';
 
 const Login = () => {
-    const { setAuth } = useContext(AuthContext);
     const userRef = useRef();
     const errRef = useRef();
 
@@ -26,17 +22,16 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(LOGIN_URL,
-                JSON.stringify({ user, pwd }),
+            const response = await fetch(LOGIN_URL,
                 {
+                    type: "GET",
                     headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
                 }
             );
-            console.log(JSON.stringify(response?.data));
-            //console.log(JSON.stringify(response));
-            const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles;
+            const result = await response.json()
+            console.log(result);
+            const accessToken = result.data?.accessToken;
+            const roles = result.data?.roles;
             setAuth({ user, pwd, roles, accessToken });
             setUser('');
             setPwd('');
@@ -62,7 +57,7 @@ const Login = () => {
                     <h1>You are logged in!</h1>
                     <br />
                     <p>
-                        <a href="#">Go to Home</a>
+                        <a href="http://localhost:5137/Profile">Go to Home</a>
                     </p>
                 </section>
             ) : (
@@ -95,7 +90,7 @@ const Login = () => {
                         Need an Account?<br />
                         <span className="line">
                             {/*put router link here*/}
-                            <a href="#">Sign Up</a>
+                            <a href="http://localhost:5173/SignUp">Sign Up</a>
                         </span>
                     </p>
                 </section>
