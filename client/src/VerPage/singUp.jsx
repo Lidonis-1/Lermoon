@@ -57,7 +57,7 @@ const Register = () => {
         try {
             const response = await fetch(REGISTER_URL, {
                 method: "POST",
-                body: JSON.stringify({ user, pwd }), // Переконайся, що бекенд очікує саме такі назви полів
+                body: JSON.stringify({ user, pwd }), 
                 headers: { 'Content-Type': 'application/json' }
             });
 
@@ -74,7 +74,7 @@ const Register = () => {
             const result = await response.json();
             setSuccess(true);
             
-            // Очищення полів (за бажанням)
+            
             setUser('');
             setPwd('');
             setMatchPwd('');
@@ -91,19 +91,22 @@ const Register = () => {
     return (
         <>
             {success ? (
-                <section>
+                <div className="ver_scen">
+                <div className="ver_box">
                     <h1>Успіх!</h1>
                     <p>
                         <a href="http://localhost:5173/Profile">Увійти</a>
                     </p>
-                </section>
+                </div>
+                </div>
             ) : (
-                <section>
+                <div className="ver_scen">
+                <div  className="ver_box" >
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
                         {errMsg}
                     </p>
                     <h1>Реєстрація</h1>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} className="label">
                         {/* USERNAME */}
                         <label htmlFor="username">
                             Користувач:
@@ -133,7 +136,6 @@ const Register = () => {
                             Дозволені літери, цифри, підкреслення, дефіси.
                         </p>
 
-                        {/* PASSWORD */}
                         <label htmlFor="password">
                             Пароль:
                             <span className={validPwd ? "valid" : "hide"}>
@@ -197,7 +199,8 @@ const Register = () => {
                             <a href="http://localhost:5173/">Увійти</a>
                         </span>
                     </p>
-                </section>
+                </div>
+                </div>
             )}
         </>
     )

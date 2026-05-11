@@ -23,12 +23,12 @@ const Login = () => {
 
     try {
         const response = await fetch(LOGIN_URL, {
-            method: "POST", // Метод має бути POST
+            method: "POST", 
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user, pwd }) // Передаємо дані
+            body: JSON.stringify({ user, pwd }) 
         });
 
-        // Якщо сервер відповів помилкою (400, 401 тощо)
+        // Якщо сервер відповів помилкою (400, 401...)
         if (!response.ok) {
             if (response.status === 400) {
                 setErrMsg('Missing Username or Password');
@@ -61,20 +61,20 @@ const Login = () => {
     return (
         <>
             {success ? (
-                <section>
+                <div>
                     <h1>You are logged in!</h1>
                     <br />
                     <p>
                         <a href="http://localhost:5173/Profile">Go to Home</a>
                     </p>
-                </section>
-            ) : (\
-                
-                <section>
+                </div>
+            ) : (
+                <div className='ver_scen'>
+                <div className='ver_box'>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h1>Sign In</h1>
-                    <form onSubmit={handleSubmit}>
-                        <label htmlFor="username">Username:</label>
+                    <form onSubmit={handleSubmit} className='label'> 
+                        <label htmlFor="username" >Username:</label>
                         <input
                             type="text"
                             id="username"
@@ -85,7 +85,7 @@ const Login = () => {
                             required
                         />
 
-                        <label htmlFor="password">Password:</label>
+                        <label htmlFor="password" >Password:</label>
                         <input
                             type="password"
                             id="password"
@@ -102,7 +102,8 @@ const Login = () => {
                             <a href="http://localhost:5173/SignUp">Sign Up</a>
                         </span>
                     </p>
-                </section>
+                </div>
+                </div>
             )}
         </>
     )
