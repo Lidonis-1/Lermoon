@@ -4,28 +4,51 @@ import "./work.css";
 
 export default function Work() {
   const { workID } = useParams<{ workID: string }>();
+  const [currentBranch, setCurrentBranch] = useState("main"); // По дефолту main
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [serverImages, setServerImages] = useState<string[]>([]);
 
-  const fetchImages = async () => {
+  // Додаємо branch у запит
+  const fetchImages = async (branch: string) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/work?workID=${workID}`,
+        `http://localhost:8080/work?workID=${workID}&branch=${branch}`,
       );
-      if (!response.ok) {
-        throw new Error(`помилка http: ${response.status}`);
-      }
       const data = await response.json();
       setServerImages(data);
     } catch (error) {
-      console.error("списку нема:", error);
+      console.error("Помилка:", error);
     }
   };
 
   useEffect(() => {
-    fetchImages();
-  }, []);
+    fetchImages(currentBranch);
+  }, [currentBranch]); // Перезавантажуємо, якщо змінили гілку
+
+  async function uploadFiles() {
+    if (!workID || files.length === 0) return;
+
+    const formData = new FormData();
+    files.forEach((file) => formData.append("images", file));
+
+    try {
+      // Додаємо branch в URL завантаження
+      await fetch(
+        `http://localhost:8080/work?workID=${workID}&branch=${currentBranch}`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
+      setFiles([]);
+      setPreviews([]);
+      fetchImages(currentBranch);
+    } catch (error) {
+      console.error("Помилка завантаження:", error);
+    }
+  }
 
   function taker(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedFiles = e.target.files;
@@ -62,40 +85,13 @@ export default function Work() {
     }
   }
 
-  async function uploadFiles() {
-    // 1. Перевірка: якщо ID немає, нічого не робимо
-    if (!workID || files.length === 0) {
-      console.error("workID відсутній!");
-      return;
-    }
-
-    const formData = new FormData();
-    // Можна навіть не додавати в body, якщо ми шлемо через URL
-    files.forEach((file) => {
-      formData.append("images", file);
-    });
-
-    try {
-      // 2. Обов'язково encodeURIComponent для безпеки URL
-      await fetch(`http://localhost:8080/work?workID=${workID}`, {
-        method: "POST",
-        body: formData,
-      });
-
-      setFiles([]);
-      setPreviews([]);
-      fetchImages();
-    } catch (error) {
-      console.error("Помилка завантаження:", error);
-    }
-  }
   return (
     <div className="workscene">
       <div className="workTree">
         {serverImages.map((imgUrl, idx) => (
           <img
             key={`server-${idx}`}
-            src={`http://localhost:8080/work/image-stream?workID=${workID}&fileName=${imgUrl}`}
+            src={`http://localhost:8080/work/image-stream?workID=${workID}&branch=${currentBranch}&fileName=${imgUrl}`}
             className="imagePreview"
             alt="server-content"
             onClick={() => console.log("в розробці")}
@@ -123,6 +119,17 @@ export default function Work() {
         </div>
       </div>
       <div className="workintruments">
+        <div className="branch-container">
+          {["main", "drafts", "final"].map((branch) => (
+            <button
+              key={branch}
+              onClick={() => setCurrentBranch(branch)}
+              className="saveBut"
+            >
+              Гілка: {branch}
+            </button>
+          ))}
+        </div>
         <button
           onClick={uploadFiles}
           disabled={files.length === 0}

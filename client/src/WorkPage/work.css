@@ -14,13 +14,14 @@
     
 }
 .workintruments{
+    width: 300px;
     flex-grow: 1;
     height: 100%;
     background-color: #474747
 
 }
 .workTree{
-    width: 80%;
+    min-width: 80%;
     min-height: 100%;
     background-color: rgb(123, 123, 123);
     display: flex;
@@ -58,6 +59,75 @@
 }
 .saveBut{
     position: relative;
+    display: flex;
     height: 100%;
     width: 100%;
+}
+
+.branch-container {
+    
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-main-branch {
+    background: #666;
+    color: white;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.branch-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.branch-item {
+    padding: 10px;
+    background: #555;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.branch-item.active {
+    background: #4caf50;
+}
+
+.mini-add-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    border-radius: 2px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.branch-selector {
+    position: relative;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.branch-btn {
+  padding: 5px 15px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: white;
+}
+
+.branch-btn.active {
+  background: #007bff;
+  color: white;
+  border-color: #0056b3;
 }

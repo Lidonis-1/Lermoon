@@ -6,13 +6,15 @@ import path from 'path';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const workID = req.query.workID;
+        const { workID, branch } = req.query; // Отримуємо гілку з URL
 
-        if (!workID || workID === 'undefined' || workID === 'null') {
+        if (!workID || workID === 'undefined') {
             return cb(new Error("ID роботи не передано!"), null);
         }
 
-        const dir = `./uploads/${workID}`;
+        const branchName = branch || 'main'; // Якщо гілку не вказано, кладемо в main
+        const dir = `./uploads/${workID}/${branchName}`;
+
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
@@ -63,14 +65,14 @@ app.delete("/work/delete", (req, res)=>{
 
 
 app.get("/work", (req, res) => {
-    const workID = req.query.workID;
-    if (!workID) return res.status(400).send("workID не вказано");
+    const { workID, branch } = req.query;
+    const branchName = branch || 'main';
+    const dirPath = `./uploads/${workID}/${branchName}`;
 
-    const dirPath = `./uploads/${workID}`;
     if (!fs.existsSync(dirPath)) return res.json([]);
 
-
     const files = fs.readdirSync(dirPath);
+    
     const sortedFiles = files.map(file => ({
         name: file,
         time: fs.statSync(path.join(dirPath, file)).mtime.getTime()
@@ -79,11 +81,13 @@ app.get("/work", (req, res) => {
     .map(file => file.name);
 
     res.json(sortedFiles);
+
 });
 
 app.get("/work/image-stream", (req, res) => {
-    const { workID, fileName } = req.query;
-    const filePath = path.join(process.cwd(), 'uploads', String(workID), String(fileName));
+    const { workID, branch, fileName } = req.query;
+    const branchName = branch || 'main';
+    const filePath = path.join(process.cwd(), 'uploads', String(workID), branchName, String(fileName));
 
     if (fs.existsSync(filePath)) {
         const stat = fs.statSync(filePath);
