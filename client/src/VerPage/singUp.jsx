@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import './styles ver.css'
 import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,7 +28,7 @@ const Register = () => {
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
-        userRef.current.focus();
+        userRef.current?.focus();
     }, [])
 
     useEffect(() => {
@@ -84,7 +86,7 @@ const Register = () => {
             if (!err && !errMsg) {
                 setErrMsg('Немає відповіді від сервера');
             }
-            errRef.current.focus();
+            errRef.current?.focus();
         }
     }
 

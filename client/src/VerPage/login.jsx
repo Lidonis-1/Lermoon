@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect} from 'react';
 const LOGIN_URL = 'http://localhost:8080/auth';
+import { Link } from "react-router-dom";
+import './styles ver.css'
 
 const Login = () => {
     const userRef = useRef();
@@ -11,7 +13,7 @@ const Login = () => {
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
-        userRef.current.focus();
+        userRef.current?.focus();
     }, [])
 
     useEffect(() => {
@@ -37,7 +39,7 @@ const Login = () => {
             } else {
                 setErrMsg('Login Failed');
             }
-            errRef.current.focus();
+            errRef.current?.focus();
             return; // Виходимо, щоб не виконувати код успіху
         }
 
@@ -45,8 +47,6 @@ const Login = () => {
         console.log(result);
         
         // Якщо досі є accessToken, зберігаємо його
-        const accessToken = result.data?.accessToken;
-        const roles = result.data?.roles;
         
         setUser('');
         setPwd('');
@@ -54,7 +54,7 @@ const Login = () => {
     } catch (err) {
         // Сюди потрапляємо ТІЛЬКИ якщо сервер вимкнений або немає мережі
         setErrMsg('No Server Response');
-        errRef.current.focus();
+        errRef.current?.focus();
     }
 }
 

@@ -4,7 +4,7 @@ import "./work.css";
 
 export default function Work() {
   const { workID } = useParams<{ workID: string }>();
-  const [currentBranch, setCurrentBranch] = useState("main"); // По дефолту main
+  const [currentBranch, setCurrentBranch] = useState("1"); // По дефолту main
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [serverImages, setServerImages] = useState<string[]>([]);
@@ -69,19 +69,23 @@ export default function Work() {
   async function clearFiles() {
     try {
       const response = await fetch(
-        `http://localhost:8080/work/delete?workID=${workID}`,
+        `http://localhost:8080/work/delete?workID=${workID}&branch=${currentBranch}`,
         {
           method: "DELETE",
         },
       );
+
       if (!response.ok) {
-        throw new Error(`${response.status}`);
+        throw new Error(`Помилка: ${response.status}`);
       }
+
       setServerImages([]);
       setPreviews([]);
       setFiles([]);
+
+      console.log("Гілку очищено");
     } catch (err) {
-      console.log(`помилка видалення файлу : ${err}`);
+      console.error(`Помилка видалення: ${err}`);
     }
   }
 
@@ -120,7 +124,7 @@ export default function Work() {
       </div>
       <div className="workintruments">
         <div className="branch-container">
-          {["main", "drafts", "final"].map((branch) => (
+          {["1", "2", "3"].map((branch) => (
             <button
               key={branch}
               onClick={() => setCurrentBranch(branch)}

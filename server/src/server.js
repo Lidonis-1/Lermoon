@@ -6,13 +6,13 @@ import path from 'path';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const { workID, branch } = req.query; // Отримуємо гілку з URL
+        const { workID, branch } = req.query;
 
         if (!workID || workID === 'undefined') {
             return cb(new Error("ID роботи не передано!"), null);
         }
 
-        const branchName = branch || 'main'; // Якщо гілку не вказано, кладемо в main
+        const branchName = branch || '1';
         const dir = `./uploads/${workID}/${branchName}`;
 
         if (!fs.existsSync(dir)) {
@@ -45,28 +45,33 @@ app.post("/work", upload.array("images"), (req, res)=>{
     res.send("ok")
 })
 
-app.delete("/work/delete", (req, res)=>{
-    const workID = req.query.workID;
-    const directory = `./uploads/${workID}`; 
+app.delete("/work/delete", (req, res) => {
+    const { workID, branch } = req.query;
 
-    fs.readdir(directory, (err, files)=>{
-        if (err){
-            console.error(err);
-            return res.status(500).send("помилка зчитання файлів")
+    if (!workID) return res.status(400).send("workID не вказано");
+
+    const targetPath = branch 
+        ? path.join(process.cwd(), 'uploads', String(workID), String(branch))
+        : path.join(process.cwd(), 'uploads', String(workID));
+
+    try {
+        if (fs.existsSync(targetPath)) {
+            fs.rmSync(targetPath, { recursive: true, force: true });
+            console.log(`Видалено: ${targetPath}`);
+            res.status(200).send("Видалення успішне");
+        } else {
+            res.status(404).send("Шлях не знайдено");
         }
-        for (const file of files){
-            fs.unlink(path.join(directory, file), (err)=>{
-                if (err) console.error(`помилка видалення ${file}:`, err);
-            })
-        }
-        res.status(200).send("+ видалення")
-    })
-})
+    } catch (err) {
+        console.error("Помилка видалення:", err);
+        res.status(500).send("Помилка сервера при видаленні");
+    }
+});
 
 
 app.get("/work", (req, res) => {
     const { workID, branch } = req.query;
-    const branchName = branch || 'main';
+    const branchName = branch || '1';
     const dirPath = `./uploads/${workID}/${branchName}`;
 
     if (!fs.existsSync(dirPath)) return res.json([]);
@@ -86,7 +91,7 @@ app.get("/work", (req, res) => {
 
 app.get("/work/image-stream", (req, res) => {
     const { workID, branch, fileName } = req.query;
-    const branchName = branch || 'main';
+    const branchName = branch || '1';
     const filePath = path.join(process.cwd(), 'uploads', String(workID), branchName, String(fileName));
 
     if (fs.existsSync(filePath)) {
