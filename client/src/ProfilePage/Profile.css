@@ -3,12 +3,12 @@
     height: 100vh;
 }
 .user_part{
-    background-color: rgb(33, 71, 97);
+    background-color: rgb(34, 74, 101);
     height: 350px;
 }
 .library_part{
     position: relative;
-    background-color: rgb(68, 75, 78);
+    background-color: rgb(67, 98, 105);
     height: 100%;
     margin-bottom: 10px;
 

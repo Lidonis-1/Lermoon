@@ -1,5 +1,5 @@
 .ver_scen{
-   position: absolute;
+    position: absolute;
     height: 100%;
     width: 100%;
     background-color: rgb(13, 70, 65);
@@ -10,7 +10,7 @@ body {
 .ver_box{
     display: flex;
     padding: 50px;
-  flex-direction: column;;
+    flex-direction: column;;
     position: relative;
     border-radius: 50px;
     width: 30%;
@@ -21,7 +21,7 @@ body {
     transform: translate(-50%, -50%);
 }
 .log_button {
-   position: relative;
+    position: relative;
     top:50%;
     left:50%;
     width: 20%;
@@ -30,7 +30,7 @@ body {
     background-color: rgb(146, 198, 194);
 }
 .label{
-    
+    gap: 5px;
     margin: 10%;
     display: grid;
     justify-content: "center";

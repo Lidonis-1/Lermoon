@@ -2,14 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Start from './GraphsPage/Graps'
-import Verif_page from './VerPage/verif';
 import Profile from './ProfilePage/ProfilePage';
 import Work from './WorkPage/Work';
+import Register from './VerPage/singUp';
+import Login from './VerPage/login';
 
 
 const router = createBrowserRouter([{
   path:'/',
-  element: <Verif_page/>,
+  element: <Login/>,
+},
+{
+  path:'/SignUp',
+  element: <Register/>
 },
 {
   path:'/Graphs',
