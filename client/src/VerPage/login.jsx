@@ -30,7 +30,7 @@ const Login = () => {
             body: JSON.stringify({ user, pwd }) 
         });
 
-        // Якщо сервер відповів помилкою (400, 401...)
+     
         if (!response.ok) {
             if (response.status === 400) {
                 setErrMsg('Missing Username or Password');
@@ -46,13 +46,13 @@ const Login = () => {
         const result = await response.json();
         console.log(result);
         
-        // Якщо досі є accessToken, зберігаємо його
+       
         
         setUser('');
         setPwd('');
         setSuccess(true);
     } catch (err) {
-        // Сюди потрапляємо ТІЛЬКИ якщо сервер вимкнений або немає мережі
+        
         setErrMsg('No Server Response');
         errRef.current?.focus();
     }
@@ -98,7 +98,7 @@ const Login = () => {
                     <p>
                         Need an Account?<br />
                         <span className="line">
-                            {/*put router link here*/}
+                            
                             <a href="http://localhost:5173/SignUp">Sign Up</a>
                         </span>
                     </p>

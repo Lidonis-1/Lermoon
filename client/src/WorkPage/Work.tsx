@@ -9,7 +9,6 @@ export default function Work() {
   const [previews, setPreviews] = useState<string[]>([]);
   const [serverImages, setServerImages] = useState<string[]>([]);
 
-  // Додаємо branch у запит
   const fetchImages = async (branch: string) => {
     try {
       const response = await fetch(
@@ -24,7 +23,7 @@ export default function Work() {
 
   useEffect(() => {
     fetchImages(currentBranch);
-  }, [currentBranch]); // Перезавантажуємо, якщо змінили гілку
+  }, [currentBranch]);
 
   async function uploadFiles() {
     if (!workID || files.length === 0) return;
@@ -33,7 +32,6 @@ export default function Work() {
     files.forEach((file) => formData.append("images", file));
 
     try {
-      // Додаємо branch в URL завантаження
       await fetch(
         `http://localhost:8080/work?workID=${workID}&branch=${currentBranch}`,
         {

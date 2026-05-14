@@ -149,7 +149,6 @@ app.post('/register', async (req, res) => {
     if (duplicate) return res.sendStatus(409); // Conflict
 
     try {
-        // Тут має бути хешування: const hashedPwd = await bcrypt.hash(pwd, 10);
         const newUser = { "username": user, "password": pwd }; // Зберігайте хеш, а не чистий пароль!
         usersDB.push(newUser);
 
@@ -167,7 +166,6 @@ app.post('/auth', async (req, res) => {
     const foundUser = usersDB.find(person => person.username === user);
     if (!foundUser) return res.sendStatus(401); // Unauthorized
 
-    // Перевірка пароля (наприклад, bcrypt.compare)
     const match = (pwd === foundUser.password); 
     
     if (match) {
