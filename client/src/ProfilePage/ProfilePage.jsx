@@ -10,12 +10,12 @@ import {idGenerator} from "./ObjGen";
 const gen = idGenerator(20);
 
 export default function Profile(){
-    const [works, setWorks] = useState([]); 
-    const [newWorks, setNewWorks] = useState([]);
+    const [works, setWorks] = useState([]);  // збережені сторінки
+    const [newWorks, setNewWorks] = useState([]); // не збережені сторінки
 
 
 
-    async function getWorks() {
+    async function getWorks() { // витягування завантажених на сервак шляхів до сторінок
       try{
         const response = await fetch("http://localhost:8080/profile")
         if (!response.ok) throw new Error(`помилка: ${response.status}`);
@@ -27,11 +27,11 @@ export default function Profile(){
       }
     }
     
-    useEffect(()=>{
+    useEffect(()=>{ //спрацювання функції при кожному завантаженні сторінки 
       getWorks()
     },[])
 
-    async function addWork(){ 
+    async function addWork(){  // завантаження нового шляху для сторінки
       const pathId = gen.next().value;
       const updatedNewWorks = [...newWorks, pathId]
       setNewWorks(updatedNewWorks)

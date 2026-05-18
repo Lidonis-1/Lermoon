@@ -3,6 +3,8 @@ import cors from "cors";
 import fs from "fs"
 import multer from "multer"
 import path from 'path';
+import fsp from 'fs/promises'; 
+import { pipeline } from 'stream/promises';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -89,19 +91,31 @@ app.get("/work", (req, res) => {
 
 });
 
-app.get("/work/image-stream", (req, res) => {
+app.get("/work/image-stream", async(req, res, next) => {
     const { workID, branch, fileName } = req.query;
     const branchName = branch || '1';
     const filePath = path.join(process.cwd(), 'uploads', String(workID), branchName, String(fileName));
 
-    if (fs.existsSync(filePath)) {
-        const stat = fs.statSync(filePath);
+    try {
+        const stat = await fsp.stat(filePath);
+
         res.setHeader('Content-Length', stat.size);
         res.setHeader('Content-Type', 'image/jpeg'); 
+
         const stream = fs.createReadStream(filePath);
-        stream.pipe(res);
-    } else {
-        res.status(404).send("Not found");
+
+        await pipeline(stream, res);
+
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            return res.status(404).send("Not found");
+        }
+
+        if (res.headersSent) {
+            console.error("Помилка під час стримінгу файлу:", error);
+            return;
+        }
+        next(error);
     }
 });
 
@@ -146,10 +160,10 @@ app.post('/register', async (req, res) => {
     }
 
     const duplicate = usersDB.find(person => person.username === user);
-    if (duplicate) return res.sendStatus(409); // Conflict
+    if (duplicate) return res.sendStatus(409); 
 
     try {
-        const newUser = { "username": user, "password": pwd }; // Зберігайте хеш, а не чистий пароль!
+        const newUser = { "username": user, "password": pwd }; 
         usersDB.push(newUser);
 
         console.log(usersDB);

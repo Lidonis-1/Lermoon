@@ -20,7 +20,7 @@ const Login = () => {
         setErrMsg('');
     }, [user, pwd])
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => { //перевірка на наявність регестрації
     e.preventDefault();
 
     try {
@@ -61,15 +61,15 @@ const Login = () => {
     return (
         <>
             {success ? (
-                <div>
+                <div> {/*форма при успіху */}
                     <h1>You are logged in!</h1>
                     <br />
                     <p>
                         <a href="http://localhost:5173/Profile">Go to Home</a>
                     </p>
                 </div>
-            ) : (
-                <div className='ver_scen'>
+            ) : ( 
+                <div className='ver_scen'> 
                 <div className='ver_box'>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h1>Sign In</h1>
@@ -99,7 +99,7 @@ const Login = () => {
                         Need an Account?<br />
                         <span className="line">
                             
-                            <a href="http://localhost:5173/SignUp">Sign Up</a>
+                            <a href="http://localhost:5173/SignUp">Sign Up</a> {/*посилання на форму регестраці */}
                         </span>
                     </p>
                 </div>
