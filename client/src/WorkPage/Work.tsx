@@ -9,8 +9,8 @@ export default function Work() {
   const [previews, setPreviews] = useState<string[]>([]);
   const [serverImages, setServerImages] = useState<string[]>([]);
 
-  // Додаємо branch у запит
   const fetchImages = async (branch: string) => {
+    // отримання збережених зображень
     try {
       const response = await fetch(
         `http://localhost:8080/work?workID=${workID}&branch=${branch}`,
@@ -24,16 +24,16 @@ export default function Work() {
 
   useEffect(() => {
     fetchImages(currentBranch);
-  }, [currentBranch]); // Перезавантажуємо, якщо змінили гілку
+  }, [currentBranch]);
 
   async function uploadFiles() {
+    // завантаження зображень
     if (!workID || files.length === 0) return;
 
     const formData = new FormData();
     files.forEach((file) => formData.append("images", file));
 
     try {
-      // Додаємо branch в URL завантаження
       await fetch(
         `http://localhost:8080/work?workID=${workID}&branch=${currentBranch}`,
         {
@@ -60,13 +60,14 @@ export default function Work() {
     newFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onload = () => {
-        setPreviews((prev) => [...prev, reader.result as string]);
+        setPreviews((prev) => [...prev, reader.result as string]); // запис масиву форматованих зоображень
       };
       reader.readAsDataURL(file);
     });
   }
 
   async function clearFiles() {
+    // повне очищення вмісту гілок
     try {
       const response = await fetch(
         `http://localhost:8080/work/delete?workID=${workID}&branch=${currentBranch}`,

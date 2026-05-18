@@ -20,7 +20,7 @@ const Login = () => {
         setErrMsg('');
     }, [user, pwd])
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => { //перевірка на наявність регестрації
     e.preventDefault();
 
     try {
@@ -30,7 +30,7 @@ const Login = () => {
             body: JSON.stringify({ user, pwd }) 
         });
 
-        // Якщо сервер відповів помилкою (400, 401...)
+     
         if (!response.ok) {
             if (response.status === 400) {
                 setErrMsg('Missing Username or Password');
@@ -46,13 +46,13 @@ const Login = () => {
         const result = await response.json();
         console.log(result);
         
-        // Якщо досі є accessToken, зберігаємо його
+       
         
         setUser('');
         setPwd('');
         setSuccess(true);
     } catch (err) {
-        // Сюди потрапляємо ТІЛЬКИ якщо сервер вимкнений або немає мережі
+        
         setErrMsg('No Server Response');
         errRef.current?.focus();
     }
@@ -61,15 +61,15 @@ const Login = () => {
     return (
         <>
             {success ? (
-                <div>
+                <div> {/*форма при успіху */}
                     <h1>You are logged in!</h1>
                     <br />
                     <p>
                         <a href="http://localhost:5173/Profile">Go to Home</a>
                     </p>
                 </div>
-            ) : (
-                <div className='ver_scen'>
+            ) : ( 
+                <div className='ver_scen'> 
                 <div className='ver_box'>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h1>Sign In</h1>
@@ -98,8 +98,8 @@ const Login = () => {
                     <p>
                         Need an Account?<br />
                         <span className="line">
-                            {/*put router link here*/}
-                            <a href="http://localhost:5173/SignUp">Sign Up</a>
+                            
+                            <a href="http://localhost:5173/SignUp">Sign Up</a> {/*посилання на форму регестраці */}
                         </span>
                     </p>
                 </div>

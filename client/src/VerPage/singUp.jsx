@@ -4,8 +4,8 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/; //опис фільтрації імені
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/; //опис фільтрації паролів
 const REGISTER_URL = 'http://localhost:8080/register';
 
 const Register = () => {
@@ -13,7 +13,7 @@ const Register = () => {
     const errRef = useRef();
 
     const [user, setUser] = useState('');
-    const [validName, setValidName] = useState(false);
+    const [validName, setValidName] = useState(false); 
     const [userFocus, setUserFocus] = useState(false);
 
     const [pwd, setPwd] = useState('');
@@ -27,28 +27,27 @@ const Register = () => {
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => {  // наведення на інпут іменні
         userRef.current?.focus();
     }, [])
 
-    useEffect(() => {
+    useEffect(() => { // фільтрування непідходячих імен
         setValidName(USER_REGEX.test(user));
     }, [user])
 
-    useEffect(() => {
+    useEffect(() => { // фільтрування паролів
         setValidPwd(PWD_REGEX.test(pwd));
         const match = pwd === matchPwd && matchPwd !== '';
         setValidMatch(match);
     }, [pwd, matchPwd])
 
-    useEffect(() => {
+    useEffect(() => { // виведення помилки
         setErrMsg('');
     }, [user, pwd, matchPwd])
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => { // запис користувача
         e.preventDefault();
         
-        // Перевірка перед відправкою
         const v1 = USER_REGEX.test(user);
         const v2 = PWD_REGEX.test(pwd);
         if (!v1 || !v2 || !validMatch) {
@@ -64,7 +63,6 @@ const Register = () => {
             });
 
             if (!response.ok) {
-                // Обробка різних кодів відповідей
                 if (response.status === 409) {
                     setErrMsg('Користувач з таким ім’ям вже існує');
                 } else {
@@ -82,7 +80,6 @@ const Register = () => {
             setMatchPwd('');
 
         } catch (err) {
-            // Якщо помилка сталася через мережу (сервер вимкнено)
             if (!err && !errMsg) {
                 setErrMsg('Немає відповіді від сервера');
             }

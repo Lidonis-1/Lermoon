@@ -2,23 +2,20 @@
 
 This project was developed solo by Oleksandr Dvorakivskyi (Lidonis-1).
 
+Project goal: to create a tool for visualizing and structuring the creative process into one holistic system
+
 ## 🛠 Tech Stack
 
 The development was carried out using the following technologies:
 
 Language: JavaScript (JS)
 Backend: Node.js, Express
-Frontend: React
+Frontend: React, React Router
 Version Control: Git
 
 ## 🧪 Integrated Laboratory Works
 
-The following laboratory assignments are integrated into the codebase:
-
-- **Lab 1:** `client/objGen.js`
-- **Lab 2:** `[path/to/file]`
-- **Lab 3:** `[path/to/file]`
-- **Lab 4:** `[path/to/file]`
-- **Lab 5:** `[path/to/file]`
-- **Lab 6:** `[path/to/file]`
-- **Lab 7:** `[path/to/file]`
+- **Lab 1:** `client/src/ProfilePage/objGen.js`
+- **Lab 5:** `client/src/WorkPage/Work.tsx(69-90)`
+- **Lab 6:** `server/src/server.js(97-120)`
+- **Lab 7:** `client/src/WorkPage/Work.tsx(116-124)`
