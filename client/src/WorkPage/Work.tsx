@@ -2,15 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./work.css";
 
-export default function Work() {
+// Окремий інтерфейс для пропсів нашої гілки
+interface CreateBranchProps {
+  currentBranch: string;
+  onAddBranch: () => void;
+}
+
+// 1. Назва з великої літери. Компонент приймає номер гілки та колбек для створення нової
+function CreateBranch({ currentBranch, onAddBranch }: CreateBranchProps) {
   const { workID } = useParams<{ workID: string }>();
-  const [currentBranch, setCurrentBranch] = useState("1"); // По дефолту main
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [serverImages, setServerImages] = useState<string[]>([]);
 
   const fetchImages = async (branch: string) => {
-    // отримання збережених зображень
     try {
       const response = await fetch(
         `http://localhost:8080/work?workID=${workID}&branch=${branch}`,
@@ -22,12 +27,12 @@ export default function Work() {
     }
   };
 
+  // Додаємо currentBranch та workID в залежності, щоб хук відпрацьовував коректно при змінах
   useEffect(() => {
     fetchImages(currentBranch);
-  }, [currentBranch]);
+  }, [currentBranch, workID]);
 
   async function uploadFiles() {
-    // завантаження зображень
     if (!workID || files.length === 0) return;
 
     const formData = new FormData();
@@ -60,14 +65,13 @@ export default function Work() {
     newFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onload = () => {
-        setPreviews((prev) => [...prev, reader.result as string]); // запис масиву форматованих зоображень
+        setPreviews((prev) => [...prev, reader.result as string]);
       };
       reader.readAsDataURL(file);
     });
   }
 
   async function clearFiles() {
-    // повне очищення вмісту гілок
     try {
       const response = await fetch(
         `http://localhost:8080/work/delete?workID=${workID}&branch=${currentBranch}`,
@@ -90,29 +94,50 @@ export default function Work() {
     }
   }
 
+  // Функція підтвердження створення нової гілки при кліку на будь-яке зображення
+  const imageClick = () => {
+    const confirmCreation = window.confirm(
+      `Бажаєте створити нову гілку на основі гілки №${currentBranch}?`,
+    );
+    if (confirmCreation) {
+      onAddBranch();
+    }
+  };
+
   return (
-    <div className="workscene">
-      <div className="workTree">
+    <div className="workBranch">
+      <h4>Гілка: {currentBranch}</h4>
+
+      <div className="images-wrapper">
         {serverImages.map((imgUrl, idx) => (
           <img
             key={`server-${idx}`}
             src={`http://localhost:8080/work/image-stream?workID=${workID}&branch=${currentBranch}&fileName=${imgUrl}`}
             className="imagePreview"
             alt="server-content"
-            onClick={() => console.log("в розробці")}
+            onClick={imageClick}
           />
         ))}
+
         {previews.map((src, index) => (
           <img
             key={`preview-${index}`}
             src={src}
             className="imagePreview"
             alt="preview"
-            onClick={() => {
-              console.log("в розробці");
-            }}
+            onClick={imageClick}
           />
         ))}
+      </div>
+
+      <div
+        style={{
+          marginTop: "10px",
+          display: "flex",
+          gap: "10px",
+          alignItems: "center",
+        }}
+      >
         <div className="castomButton">
           Додати зображення
           <input
@@ -122,19 +147,8 @@ export default function Work() {
             accept="image/*"
           />
         </div>
-      </div>
-      <div className="workintruments">
-        <div className="branch-container">
-          {["1", "2", "3"].map((branch) => (
-            <button
-              key={branch}
-              onClick={() => setCurrentBranch(branch)}
-              className="saveBut"
-            >
-              Гілка: {branch}
-            </button>
-          ))}
-        </div>
+
+        {/* Кнопки збереження та видалення тепер тут, бо вони керують станом саме цієї гілки */}
         <button
           onClick={uploadFiles}
           disabled={files.length === 0}
@@ -149,6 +163,64 @@ export default function Work() {
         >
           clear work
         </button>
+      </div>
+    </div>
+  );
+}
+
+export default function Work() {
+  const { workID } = useParams<{ workID: string }>();
+  const [branches, setBranches] = useState<string[]>(["1"]);
+
+  async function getAmBranches() {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/work/collector?workID=${workID}`,
+      );
+
+      if (!response.ok) {
+        throw new Error(`Помилка: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setBranches((prev) => [...data]);
+    } catch (err) {
+      console.error(`помилка: ${err}`);
+    }
+  }
+
+  useEffect(() => {
+    getAmBranches();
+  }, []);
+
+  // Функція, яка додає +1 до лічильника і створює нову гілку в масиві
+  const plBrunch = () => {
+    setBranches((prev) => {
+      const nextBranchNumber = String(prev.length + 1);
+      return [...prev, nextBranchNumber];
+    });
+  };
+
+  return (
+    <div className="workscene">
+      {/* Сюди циклом рендеримо всі створені гілки */}
+      <div className="workTree">
+        {branches.map((branchId) => (
+          <CreateBranch
+            key={branchId}
+            currentBranch={branchId}
+            onAddBranch={plBrunch}
+          />
+        ))}
+      </div>
+
+      <div className="workintruments">
+        <div className="branch-container">
+          {/* Головна кнопка для створення нової гілки вручну з інструментів */}
+          <button onClick={plBrunch} className="saveBut">
+            + Створити нову гілку ({branches.length + 1})
+          </button>
+        </div>
       </div>
     </div>
   );

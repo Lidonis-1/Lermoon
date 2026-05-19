@@ -119,6 +119,17 @@ app.get("/work/image-stream", async(req, res, next) => {
     }
 });
 
+app.get("/work/collector", (req, res) => {
+    const {workID} = req.query
+    const dirPath = `./uploads/${workID}`
+    if (!fs.existsSync(dirPath)){
+        return res.status(404).json({message: 'file doesnt exist'})
+    }
+
+    const files = fs.readdirSync(dirPath);
+    res.json(files)
+})
+
 app.get("/profile",(req,res)=>{
     const dirArr = fs.readdirSync('./uploads');
     const sortedarr = dirArr.map(file => ({

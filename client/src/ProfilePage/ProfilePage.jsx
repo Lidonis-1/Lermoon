@@ -69,7 +69,7 @@ export default function Profile(){
         {works.map((place, skey) => (
           <Link key={`work-${skey}`} to={`/work/${place}`}>
             <div className="work-box">
-              image
+              {place}
             </div>
           </Link>
         ))}
@@ -77,7 +77,7 @@ export default function Profile(){
         {newWorks.map((place, skey) => (
           <Link key={`new-work-${skey}`} to={`/work/${place}`}>
             <div className="work-box">
-              image
+              {place}
             </div>
           </Link>
         ))}
