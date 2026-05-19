@@ -15,7 +15,9 @@ Version Control: Git
 
 ## 🧪 Integrated Laboratory Works
 
-- **Lab 1:** `client/src/ProfilePage/objGen.js`
-- **Lab 5:** `client/src/WorkPage/Work.tsx(69-90)`
-- **Lab 6:** `server/src/server.js(97-120)`
-- **Lab 7:** `client/src/WorkPage/Work.tsx(116-124)`
+- **Lab 1:** `client/src/ProfilePage/objGen.js`;
+- **Lab 5:** `client/src/WorkPage/Work.tsx(69-90)`;
+- **Lab 6:** `server/src/server.js(97-120)`;
+- **Lab 7:** `client/src/WorkPage/Work.tsx(116-124)`.
+
+other laboratory tests were submitted separately.
