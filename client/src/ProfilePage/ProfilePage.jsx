@@ -12,9 +12,9 @@ const gen = idGenerator(20);
 
 export default function Profile(){
 
-  const [creation, setCreation ] = useState(false) 
-  const [wName, setWName] = useState("")
-  const [problem, setProblem] = useState(false)
+  const [creation, setCreation ] = useState(false) // няявність вікна
+  const [wName, setWName] = useState("") // запис імені в вікні
+  const [problem, setProblem] = useState(false) 
 
   const [works, setWorks] = useState([]);  // збережені сторінки
   const [newWorks, setNewWorks] = useState([]); // не збережені сторінки

@@ -6,16 +6,21 @@ import "./work.css";
 interface CreateBranchProps {
   currentBranch: string;
   onAddBranch: () => void;
+  lookImg: string;
 }
 
 // 1. Назва з великої літери. Компонент приймає номер гілки та колбек для створення нової
-function CreateBranch({ currentBranch, onAddBranch }: CreateBranchProps) {
+function CreateBranch({
+  currentBranch,
+  onAddBranch,
+  lookImg,
+}: CreateBranchProps) {
   const { workID } = useParams<{ workID: string }>();
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [serverImages, setServerImages] = useState<string[]>([]);
 
-  const fetchImages = async (branch: string) => {
+  async function fetchImages(branch: string) {
     try {
       const response = await fetch(
         `http://localhost:8080/work?workID=${workID}&branch=${branch}`,
@@ -25,7 +30,7 @@ function CreateBranch({ currentBranch, onAddBranch }: CreateBranchProps) {
     } catch (error) {
       console.error("Помилка:", error);
     }
-  };
+  }
 
   // Додаємо currentBranch та workID в залежності, щоб хук відпрацьовував коректно при змінах
   useEffect(() => {
@@ -114,6 +119,7 @@ function CreateBranch({ currentBranch, onAddBranch }: CreateBranchProps) {
             key={`server-${idx}`}
             src={`http://localhost:8080/work/image-stream?workID=${workID}&branch=${currentBranch}&fileName=${imgUrl}`}
             className="imagePreview"
+            style={{ objectFit: lookImg as any }}
             alt="server-content"
             onClick={imageClick}
           />
@@ -124,6 +130,7 @@ function CreateBranch({ currentBranch, onAddBranch }: CreateBranchProps) {
             key={`preview-${index}`}
             src={src}
             className="imagePreview"
+            style={{ objectFit: lookImg as any }}
             alt="preview"
             onClick={imageClick}
           />
@@ -170,6 +177,8 @@ function CreateBranch({ currentBranch, onAddBranch }: CreateBranchProps) {
 
 export default function Work() {
   const { workID } = useParams<{ workID: string }>();
+
+  const [lookImg, setLookImg] = useState("contain");
   const [branches, setBranches] = useState<string[]>(["1"]);
 
   async function getAmBranches() {
@@ -210,6 +219,7 @@ export default function Work() {
             key={branchId}
             currentBranch={branchId}
             onAddBranch={plBrunch}
+            lookImg={lookImg}
           />
         ))}
       </div>
@@ -219,6 +229,36 @@ export default function Work() {
           {/* Головна кнопка для створення нової гілки вручну з інструментів */}
           <button onClick={plBrunch} className="saveBut">
             + Створити нову гілку ({branches.length + 1})
+          </button>
+        </div>
+        <p>object-fit: {lookImg}</p>
+        <div className="choice">
+          <button
+            className="saveBut"
+            style={{ width: "25%" }}
+            onClick={() => {
+              setLookImg("contain");
+            }}
+          >
+            contain
+          </button>
+          <button
+            className="saveBut"
+            style={{ width: "25%" }}
+            onClick={() => {
+              setLookImg("cover");
+            }}
+          >
+            cover
+          </button>
+          <button
+            className="saveBut"
+            style={{ width: "25%" }}
+            onClick={() => {
+              setLookImg("fill");
+            }}
+          >
+            fill
           </button>
         </div>
       </div>
